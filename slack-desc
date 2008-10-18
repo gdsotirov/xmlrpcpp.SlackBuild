@@ -1,11 +1,10 @@
-xmlrpc++: XmlRpc++ 0.7 C++ implementation of the XML-RPC protocol
+xmlrpc++: XmlRpc++ 0.7 (A C++ library implementing the XML-RPC protocol)
 xmlrpc++:
 xmlrpc++: XmlRpc++ is a C++ implementation of the XML-RPC protocol, based
 xmlrpc++: upon Shilad Sen's excellent py-xmlrpc. The XmlRpc protocol was
-xmlrpc++: designed to make remote procedure calls easy: it encodes data in a
-xmlrpc++: simple XML format and uses HTTP for communication. XmlRpc++ is
-xmlrpc++: designed to make it easy to incorporate XML-RPC client and server
-xmlrpc++: support into C++ applications.
+xmlrpc++: designed to make remote procedure calls easy: it encodes data
+xmlrpc++: in a simple XML format and uses HTTP for communication.
+xmlrpc++: XmlRpc++ is designed to make it easy to incorporate XML-RPC client
+xmlrpc++: and server support into C++ applications.
 xmlrpc++:
-xmlrpc++: Packager: Georgi D. Sotirov <gdsotirov@dir.bg>
-xmlrpc++:
+xmlrpc++: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
