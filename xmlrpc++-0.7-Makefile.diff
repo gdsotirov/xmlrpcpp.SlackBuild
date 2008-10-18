@@ -1,0 +1,43 @@
+--- Makefile.orig	2003-03-06 19:25:38.000000000 +0200
++++ Makefile	2008-10-18 22:20:08.000000000 +0300
+@@ -4,10 +4,10 @@
+ CPPFLAGS	= -I$(SRC)
+ DEBUG		= -g
+ OPTIMIZE	= -O2
+-GCCWARN		= -Wall -Wstrict-prototypes
+-CXXFLAGS	= $(DEBUG) $(GCCWARN) $(OPTIMIZE) $(INCLUDES)
++GCCWARN		= -Wall
++CXXFLAGS	= $(GCCWARN) $(OPTIMIZE) $(ARCHFLAGS) -fPIC $(INCLUDES)
+ 
+-LIB		= ./libXmlRpc.a
++LIB		= ./libXmlRpc.so
+ 
+ # Add your system-dependent network libs here. These are
+ # only used to build the tests (your application will need them too).
+@@ -17,15 +17,20 @@
+ SYSTEMLIBS	=
+ LDLIBS		= $(LIB) $(SYSTEMLIBS)
+ 
+-OBJ		= $(SRC)/XmlRpcClient.o $(SRC)/XmlRpcDispatch.o \
+-		$(SRC)/XmlRpcServer.o $(SRC)/XmlRpcServerConnection.o \
+-		$(SRC)/XmlRpcServerMethod.o $(SRC)/XmlRpcSocket.o $(SRC)/XmlRpcSource.o \
+-		$(SRC)/XmlRpcUtil.o $(SRC)/XmlRpcValue.o
++OBJ		= $(SRC)/XmlRpcClient.o \
++		$(SRC)/XmlRpcDispatch.o \
++		$(SRC)/XmlRpcServer.o \
++		$(SRC)/XmlRpcServerConnection.o \
++		$(SRC)/XmlRpcServerMethod.o \
++		$(SRC)/XmlRpcSocket.o \
++		$(SRC)/XmlRpcSource.o \
++		$(SRC)/XmlRpcUtil.o \
++		$(SRC)/XmlRpcValue.o
+ 
+-all:		$(LIB) tests
++all:		$(LIB)
+ 
+ $(LIB):		$(OBJ)
+-		$(AR) $(ARFLAGS) $(LIB) $(OBJ)
++		$(CXX) -shared -o $(LIB) $(OBJ)
+ 
+ 
+ tests:		$(LIB)
