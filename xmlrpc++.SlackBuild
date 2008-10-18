@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# SlackBuild for xmlrpc++
+# Written by Georgi D. Sotirov <gdsotirov@dir.bg>
+
+. ../slack-package.conf
+
+NAME=xmlrpc++
+VER_MAJ=0
+VER_MIN=7
+VERSION=${VER_MAJ}.${VER_MIN}
+ARCH=${ARCH:-i486}
+LIBNAME=libXmlRpc.so
+BUILD=1
+
+CWD=${CWD:-`pwd`}
+TMP=${TMP:-/tmp}
+
+cd $TMP
+tar -zxvf $CWD/${NAME}${VERSION}.tar.gz
+SRC=$TMP/${NAME}${VERSION}
+
+cd $SRC
+fix_source
+
+# Patch makefile
+patch -p0 -b -z.orig < $CWD/xmlrpc++-0.7-Makefile.diff
+
+# Build
+ARCHFLAGS='-march=i486 -mtune=i686' \
+make -j4 || exit 1
+make doc doxygen
+
+PKG="$TMP/package-$NAME"
+mkdir -p $PKG
+
+# Installation
+install -d -m 755 $PKG/usr/lib
+install -m 644 $SRC/$LIBNAME $PKG/usr/lib/${LIBNAME}.${VERSION}
+( cd $PKG/usr/lib
+  ln -s ${LIBNAME}.${VERSION} ${LIBNAME}.${VER_MAJ}
+  ln -s ${LIBNAME}.${VERSION} ${LIBNAME}
+)
+
+install -d -m 755 $PKG/usr/include
+cp -a $SRC/src/*.h $PKG/usr/include
+
+install -d -m 755 $PKG/usr/doc/$NAME-$VERSION
+cp -a $SRC/doc/html $PKG/usr/doc/$NAME-$VERSION
+
+install -d -m 755 $PKG/install
+install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
+install -m 644 $CWD/slack-required $PKG/install/slack-required
+
+install -d -m 755 $PKG/usr/src/slackbuilds/$NAME-$VERSION
+install -m 644 $CWD/slack-desc     $PKG/usr/src/slackbuilds/$NAME-$VERSION
+install -m 644 $CWD/slack-required $PKG/usr/src/slackbuilds/$NAME-$VERSION
+install -m 644 $CWD/$NAME-$VERSION-Makefile.diff \
+               $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME-$VERSION-Makefile.diff
+install -m 644 $CWD/$NAME.SlackBuild \
+               $PKG/usr/src/slackbuilds/$NAME-$VERSION
+
+# Prepare the package
+bin_perms $PKG
+( cd $PKG; strip_lib )
+( cd $SRC; create_docs $PKG $NAME-$VERSION )
+
+cd $PKG
+PKGNAME=$NAME-$VERSION-$ARCH-$BUILD$MYIN
+makepkg -l y -c n $PKG_DIR/$PKGNAME.tgz
+cd $PKG_DIR
+md5sum $PKGNAME.tgz > $PKGNAME.tgz.md5
+cat $PKG/install/slack-desc > $PKG_DIR/$PKGNAME.txt
+
+if [ "$1" == "--cleanup" ]; then
+  rm -r $SRC
+  rm -r $PKG
+fi
+
