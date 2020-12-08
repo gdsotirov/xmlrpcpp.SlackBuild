@@ -7,4 +7,4 @@ xmlrpc++: in a simple XML format and uses HTTP for communication.
 xmlrpc++: XmlRpc++ is designed to make it easy to incorporate XML-RPC client
 xmlrpc++: and server support into C++ applications.
 xmlrpc++:
-xmlrpc++: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
+xmlrpc++: Packaged by Georgi D. Sotirov <gdsotirov@gmail.com>
